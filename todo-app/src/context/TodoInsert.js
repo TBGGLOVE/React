@@ -1,9 +1,11 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import './TodoInsert.scss';
+import TodoContext from './TodoContext';
 
-const TodoInsert = ({ insertTodo }) => {
-  
+const TodoInsert = () => {
+  const { actions } = useContext(TodoContext);
+
   const [value, setValue] = useState('');
   const inputBox = useRef();
 
@@ -13,15 +15,14 @@ const TodoInsert = ({ insertTodo }) => {
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
+    console.log('안녕');
     inputBox.current.focus();
 
     if (value === '' && value.length === 0) {
       alert('할일을 입력해 주세요');
       return false;
     }
-    //할일을 추가한다
-    insertTodo(value);
-
+    actions.insertTodo(value);
     setValue('');
     return false;
   });
@@ -33,7 +34,6 @@ const TodoInsert = ({ insertTodo }) => {
         value={value}
         onChange={onChange}
         placeholder="할일을 입력하세요"
-        required
       />
       <button type="submit">
         <MdAdd />
