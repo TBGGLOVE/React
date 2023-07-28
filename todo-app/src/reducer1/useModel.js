@@ -28,7 +28,7 @@ function useModel() {
   }, []);
 
   const todoList = () => {
-    axios.get('/todoList').then((response) => {
+    axios.get('/api2/v1/todoList').then((response) => {
       dispatch({
         type: 'ALL_LIST_TODO',
         todos: response.data,
@@ -39,9 +39,9 @@ function useModel() {
   const insertTodo = useCallback((value) => {
     axios
       .post(
-        '/insert',
+        '/api2/v1/insert',
         {
-          checked: 'F',
+          checked: false,
           title: value,
         },
         {
@@ -53,7 +53,7 @@ function useModel() {
           type: 'ADD_TODO',
           todo: {
             id: response.data,
-            checked: 'F',
+            checked: false,
             title: value,
           },
         });
@@ -61,12 +61,9 @@ function useModel() {
   }, []);
 
   const removeTodo = useCallback((id) => {
-    console.log('************************');
-    console.log(id);
-
     axios
       .post(
-        '/delete',
+        '/api2/v1/delete',
         {
           id: id,
         },
@@ -84,11 +81,26 @@ function useModel() {
       });
   }, []);
 
-  const changeChecked = useCallback((id) => {
-    dispatch({
-      type: 'TOGGLE_CHECKED',
-      id: id,
-    });
+  const changeChecked = useCallback((id, checked) => {
+    axios
+      .post(
+        '/api2/v1/update',
+        {
+          id: id,
+          checked_yn: checked ? 'N' : 'Y',
+        },
+        {
+          headers: { 'Content-type': 'application/json' },
+        },
+      )
+      .then((response) => {
+        if (parseInt(response.data) === 1) {
+          dispatch({
+            type: 'TOGGLE_CHECKED',
+            id: id,
+          });
+        }
+      });
   }, []);
 
   return { todos, removeTodo, insertTodo, changeChecked };

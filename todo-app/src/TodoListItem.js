@@ -19,22 +19,22 @@ const TodoListItem = ({ todo, removeTodo, changeChecked, style }) => {
 
   const onChangeChecked = useCallback(
     (e) => {
-      changeChecked(todo.id);
+      changeChecked(todo.id, todo.checked);
     },
     [todo],
   );
 
   return (
-    <div className='TodoListItem-virtualized' style={style}>
-        <div className="TodoListItem">
+    <div className="TodoListItem-virtualized" style={style}>
+      <div className="TodoListItem">
         <div className={cn('checkbox', { checked })} onClick={onChangeChecked}>
-            {checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
-            <div className="text">{title}</div>
+          {checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
+          <div className="text">{title}</div>
         </div>
         <div className="remove" onClick={onClickRemove}>
-            <MdRemoveCircleOutline />
+          <MdRemoveCircleOutline />
         </div>
-        </div>
+      </div>
     </div>
   );
 };
